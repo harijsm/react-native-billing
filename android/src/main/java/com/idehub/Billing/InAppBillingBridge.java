@@ -232,7 +232,7 @@ public class InAppBillingBridge extends ReactContextBaseJavaModule implements Ac
     public void isValidTransactionDetails(final String productId, final Promise promise) {
         if (bp != null) {
             try {
-                TransactionDetails details = bp.getPurchaseTransactionDetails(productId);
+                PurchaseInfo details = bp.getPurchaseTransactionDetails(productId);
                 promise.resolve(bp.isValidPurchaseInfo(details));
             } catch (Exception ex) {
                 promise.reject("EUNSPECIFIED", "Failed to validate transaction details: " + ex.getMessage());
@@ -368,7 +368,7 @@ public class InAppBillingBridge extends ReactContextBaseJavaModule implements Ac
     @ReactMethod
     public void getPurchaseTransactionDetails(final String productId, final Promise promise) {
         if (bp != null) {
-            TransactionDetails details = bp.getPurchaseTransactionDetails(productId);
+            PurchaseInfo details = bp.getPurchaseTransactionDetails(productId);
             if (details != null && productId.equals(details.purchaseInfo.purchaseData.productId))
             {
                   WritableMap map = mapTransactionDetails(details);
@@ -384,7 +384,7 @@ public class InAppBillingBridge extends ReactContextBaseJavaModule implements Ac
     @ReactMethod
     public void getSubscriptionTransactionDetails(final String productId, final Promise promise) {
         if (bp != null) {
-            TransactionDetails details = bp.getSubscriptionPurchaseInfo(productId);
+            PurchaseInfo details = bp.getSubscriptionPurchaseInfo(productId);
             if (details != null && productId.equals(details.purchaseInfo.purchaseData.productId))
             {
                   WritableMap map = mapTransactionDetails(details);
@@ -397,7 +397,7 @@ public class InAppBillingBridge extends ReactContextBaseJavaModule implements Ac
         }
     }
 
-    private WritableMap mapTransactionDetails(TransactionDetails details) {
+    private WritableMap mapTransactionDetails(PurchaseInfo details) {
         WritableMap map = Arguments.createMap();
 
         map.putString("receiptData", details.purchaseInfo.responseData.toString());
