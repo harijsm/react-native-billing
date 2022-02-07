@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.anjlab.android.iab.v3.BillingProcessor;
 import com.anjlab.android.iab.v3.SkuDetails;
-import com.anjlab.android.iab.v3.TransactionDetails;
+import com.anjlab.android.iab.v3.PurchaseInfo;
 import com.anjlab.android.iab.v3.PurchaseData;
 
 import com.facebook.react.bridge.ActivityEventListener;
@@ -110,7 +110,7 @@ public class InAppBillingBridge extends ReactContextBaseJavaModule implements Ac
     }
 
     @Override
-    public void onProductPurchased(String productId, TransactionDetails details) {
+    public void onProductPurchased(String productId, PurchaseInfo details) {
         if (details != null && productId.equals(details.purchaseInfo.purchaseData.productId))
         {
             try {
@@ -233,7 +233,7 @@ public class InAppBillingBridge extends ReactContextBaseJavaModule implements Ac
         if (bp != null) {
             try {
                 TransactionDetails details = bp.getPurchaseTransactionDetails(productId);
-                promise.resolve(bp.isValidTransactionDetails(details));
+                promise.resolve(bp.isValidPurchaseInfo(details));
             } catch (Exception ex) {
                 promise.reject("EUNSPECIFIED", "Failed to validate transaction details: " + ex.getMessage());
             }
@@ -384,7 +384,7 @@ public class InAppBillingBridge extends ReactContextBaseJavaModule implements Ac
     @ReactMethod
     public void getSubscriptionTransactionDetails(final String productId, final Promise promise) {
         if (bp != null) {
-            TransactionDetails details = bp.getSubscriptionTransactionDetails(productId);
+            TransactionDetails details = bp.getSubscriptionPurchaseInfo(productId);
             if (details != null && productId.equals(details.purchaseInfo.purchaseData.productId))
             {
                   WritableMap map = mapTransactionDetails(details);
